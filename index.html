@@ -2,74 +2,116 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1020">
 <title>DigitalClup</title>
 <style>
+:root{--bg:#0b1020;--panel:#141e32;--line:#263651;--blue:#548cff;--muted:#9aa9c1;--green:#45d6a0}
 *{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:#fff;font-family:Arial,sans-serif}
-header{padding:22px 18px;background:#111a30;border-bottom:1px solid #26324a}
-h1{margin:0;color:#65a7ff;font-size:25px}
-header p{color:#aab6cc;margin-bottom:0}
-main{padding:18px;max-width:700px;margin:auto}
-.balance,.service,.menu{background:#141e34;border:1px solid #293957;border-radius:14px;padding:18px;margin-bottom:15px}
-.balance strong{font-size:27px;display:block;margin:10px 0;color:#69e0b1}
-h2{font-size:19px;margin-top:0}
-button{background:#3478f6;color:white;border:0;padding:12px 16px;border-radius:9px;font-size:15px;cursor:pointer}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-nav button{background:#202c45}
-.service p,.muted{color:#aab6cc}
-.price{font-weight:bold;margin:12px 0}
-footer{text-align:center;padding:25px;color:#8492aa}
+body{margin:0;background:var(--bg);color:#f4f7ff;font:15px Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;border-radius:10px;padding:12px;background:var(--blue);color:white}
+button:disabled{opacity:.5}
+header{padding:19px 17px;background:#10192b;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:43px;height:43px;border-radius:13px;background:linear-gradient(135deg,#438cff,#865cff);display:grid;place-items:center;font-size:21px;font-weight:bold}
+h1{font-size:22px;margin:0}
+header p{margin:6px 0 0;color:var(--muted);font-size:13px}
+main{max-width:760px;margin:auto;padding:16px 14px 105px}
+.balance{padding:20px;border-radius:18px;background:linear-gradient(130deg,#1d4f9d,#42317d);margin-bottom:20px}
+.balance small{color:#d6e4ff}
+.money{font-size:30px;font-weight:bold;margin:10px 0 16px}
+.secondary{background:#ffffff18;border:1px solid #ffffff35}
+.section-title{font-size:19px;margin:23px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px;min-width:0}
+.category{min-height:113px;text-align:left;color:white;background:var(--panel);border:1px solid var(--line);padding:14px}
+.category .emoji{font-size:26px;display:block;margin-bottom:13px}
+.category b{font-size:14px}
+.muted{color:var(--muted);font-size:13px;line-height:1.5}
+.service{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0}
+.service h3{font-size:15px;margin:0 0 6px}
+.price{font-weight:bold;color:var(--green);margin:9px 0}
+.service button{font-size:13px;padding:10px}
+.pill{display:inline-block;background:#263b5a;color:#c6dcff;border-radius:20px;padding:5px 9px;font-size:11px}
+.field{display:block;width:100%;padding:12px;background:#0b1324;border:1px solid var(--line);border-radius:9px;color:white;margin:8px 0 13px}
+label{display:block;font-size:13px;color:#bdc9dc;margin-top:10px}
+.full{width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1}
+.notice{background:#24243b;border:1px solid #514576;border-radius:11px;padding:12px;color:#d6d1ff;font-size:12px;line-height:1.5}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#10192bf5;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom))}
+nav button{background:transparent;color:#aebbd0;padding:7px 5px;font-size:11px;flex:1;border-radius:8px}
+nav button.active{background:#223858;color:white}
+nav span{display:block;font-size:19px;margin-bottom:5px}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.empty{padding:24px 10px;text-align:center;color:var(--muted)}
+.danger{background:#8c3547}
+h2{font-size:19px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <header>
-<h1>DigitalClup</h1>
-<p>Rəqəmsal xidmətlər mağazası</p>
+ <div class="brand">
+  <div class="logo">D</div>
+  <div><h1>DigitalClup</h1><p>Rəqəmsal xidmətlər platforması</p></div>
+ </div>
 </header>
-<main>
+<main id="app"></main>
 <nav>
-<button onclick="show('home')">Ana səhifə</button>
-<button onclick="show('services')">Xidmətlər</button>
-<button onclick="show('orders')">Sifarişlərim</button>
-<button onclick="show('profile')">Profil</button>
+ <button class="active" data-page="home" onclick="go('home',this)"><span>⌂</span>Ana səhifə</button>
+ <button data-page="services" onclick="go('services',this)"><span>▦</span>Xidmətlər</button>
+ <button data-page="orders" onclick="go('orders',this)"><span>▤</span>Sifarişlər</button>
+ <button data-page="profile" onclick="go('profile',this)"><span>♙</span>Profil</button>
 </nav>
-<section id="content"></section>
-</main>
-<footer>DigitalClup © 2026</footer>
 <script>
-const services=[
-{name:"YouTube xidmətləri",price:5},
-{name:"Telegram xidmətləri",price:3},
-{name:"Rəqəmsal xidmətlər",price:4}
+const $=id=>document.getElementById(id);
+const initialServices=[
+{id:1,name:"Virtual nömrələr",cat:"Virtual nömrələr",price:1.5,desc:"Ölkə və xidmət seçimi üçün demo",active:true},
+{id:2,name:"SMM xidmətləri",cat:"SMM paneli",price:2,desc:"Sosial şəbəkə xidmətləri",active:true},
+{id:3,name:"Zəng xidmətləri",cat:"Zəng və SMS",price:1,desc:"Provayder qoşulması tələb olunur",active:true},
+{id:4,name:"SMS xidmətləri",cat:"Zəng və SMS",price:1,desc:"SMS provayderi ilə işləyəcək",active:true},
+{id:5,name:"WhatsApp mesaj alətləri",cat:"Mesaj alətləri",price:2,desc:"Razılıq əsasında mesaj sınaqları",active:true},
+{id:6,name:"Səsli mesaj alətləri",cat:"Mesaj alətləri",price:2,desc:"Sınaq interfeysi",active:true}
 ];
-let balance=20;
-let orders=[];
-function show(page){
-const c=document.getElementById("content");
-if(page==="home"){
-c.innerHTML=`<div class="balance"><h2>Mənim balansım</h2><strong>${balance.toFixed(2)} AZN</strong><button onclick="addBalance()">Balansı artır</button></div><div class="menu"><h2>Xoş gəlmisən!</h2><p class="muted">Xidmətləri seç, sifarişlərini və balansını bir yerdən idarə et.</p><button onclick="show('services')">Mağazaya keç</button></div>`;
-}
-if(page==="services"){
-c.innerHTML="<h2>Xidmətlər</h2>"+services.map((s,i)=>`<div class="service"><h2>${s.name}</h2><p>Demo xidmət — sifariş sınağı üçün.</p><div class="price">${s.price.toFixed(2)} AZN</div><button onclick="buy(${i})">Sifariş et</button></div>`).join("");
-}
-if(page==="orders"){
-c.innerHTML="<h2>Sifarişlərim</h2>"+(orders.length?orders.map(o=>`<div class="service">${o.name}<p>${o.price.toFixed(2)} AZN — ${o.status}</p></div>`).join(""):"<p class='muted'>Hələ sifariş yoxdur.</p>");
-}
-if(page==="profile"){
-c.innerHTML=`<div class="service"><h2>Profil</h2><p>İstifadəçi: Demo istifadəçi</p><p>Balans: ${balance.toFixed(2)} AZN</p><p class="muted">Bu, hələlik sınaq profilidir.</p></div>`;
-}
-}
-function addBalance(){alert("Demo rejimidir. Real ödəniş sistemi hələ qoşulmayıb.");}
-function buy(i){
-const s=services[i];
-if(balance<s.price){alert("Balans kifayət etmir.");return;}
-balance-=s.price;
-orders.push({...s,status:"Demo sifariş"});
-show("services");
-alert("Demo sifariş yaradıldı!");
-}
-show("home");
+function load(k,f){try{let x=localStorage.getItem("dc_"+k);return x===null?f:JSON.parse(x)}catch(e){return f}}
+let services=load("services",initialServices);
+let balance=load("balance",20);
+let orders=load("orders",[]);
+let page="home",category="",filter="";
+function save(){localStorage.setItem("dc_services",JSON.stringify(services));localStorage.setItem("dc_balance",JSON.stringify(balance));localStorage.setItem("dc_orders",JSON.stringify(orders))}
+function money(n){return Number(n).toFixed(2)+" AZN"}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function go(p,btn){page=p;document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));render()}
+function serviceCard(s){return `<div class="card"><span class="pill">${safe(s.cat)}</span><div class="service"><div><h3>${safe(s.name)}</h3><div class="muted">${safe(s.desc)}</div></div></div><div class="price">${money(s.price)}</div><button class="full" onclick="buy(${s.id})">Sifariş et</button></div>`}
+function home(){let cats=[["📱","Virtual nömrələr"],["📊","SMM paneli"],["☎️","Zəng və SMS"],["💬","Mesaj alətləri"]];return `
+<div class="balance"><small>Mövcud demo balans</small><div class="money">${money(balance)}</div><button class="secondary" onclick="go('balance')">＋ Balansı artır</button></div>
+<div class="notice">Demo rejimi: real ödəniş və real xidmət hələ qoşulmayıb. Balans yalnız bu brauzerdə sınaq üçündür.</div>
+<h2 class="section-title">Xidmət kateqoriyaları</h2><div class="grid">${cats.map(c=>`<button class="category" onclick="category='${c[1]}';go('services')"><span class="emoji">${c[0]}</span><b>${c[1]}</b></button>`).join("")}</div>
+<h2 class="section-title">Populyar xidmətlər</h2><div class="grid">${services.filter(s=>s.active).slice(0,4).map(serviceCard).join("")}</div>
+<h2 class="section-title">Son sifarişlər</h2>${orders.length?orders.slice(-2).reverse().map(orderCard).join(""):'<div class="card muted">Hələ sifariş yoxdur.</div>'}
+<button class="full" style="margin-top:18px;background:#263651" onclick="adminLogin()">⚙ Admin paneli</button>`}
+function servicesPage(){let cats=["Hamısı",...new Set(services.map(s=>s.cat))];let list=services.filter(s=>s.active&&(!category||category===s.cat)&&(!filter||s.name.toLowerCase().includes(filter.toLowerCase())));return `<h2>Xidmətlər</h2><input class="field" placeholder="Xidmət axtar..." value="${safe(filter)}" oninput="filter=this.value;render()"><div class="row">${cats.map(c=>`<button style="margin-bottom:8px;background:${(category===c||(c==="Hamısı"&&!category))?'#548cff':'#202c43'}" onclick="category='${c==="Hamısı"?'':c}';render()">${c}</button>`).join("")}</div><div class="grid">${list.map(serviceCard).join("")||'<div class="empty">Xidmət tapılmadı.</div>'}</div>`}
+function orderCard(o){return `<div class="card" style="margin:10px 0"><div class="row"><b>${safe(o.name)}</b><span class="pill">${safe(o.status)}</span></div><p class="muted">Sifariş #${o.id} · ${safe(o.date)}</p><div class="price">${money(o.price)}</div></div>`}
+function ordersPage(){return `<h2>Sifarişlərim</h2>${orders.length?orders.slice().reverse().map(orderCard).join(""):'<div class="card empty">Sifariş tarixçən boşdur.</div>'}`}
+function profilePage(){return `<h2>Profil</h2><div class="card"><div class="logo">D</div><h3>Demo istifadəçi</h3><p class="muted">İstifadəçi hesabı sonradan Telegram vasitəsilə bağlanacaq.</p><hr><div class="muted">Balans</div><h2>${money(balance)}</h2><button onclick="go('balance')">Balansı artır</button></div><h2 class="section-title">İdarəetmə</h2><div class="card"><p class="muted">Admin paneli bu demo üçündür. İctimai istifadədən əvvəl serverdə qorunan giriş yaradılmalıdır.</p><button class="full" onclick="adminLogin()">Admin panelinə daxil ol</button></div>`}
+function balancePage(){return `<h2>Balansı artır</h2><div class="card"><p class="muted">Hazırkı demo balansın</p><h2>${money(balance)}</h2><label>Demo məbləği (AZN)</label><input id="amount" class="field" type="number" min="1" max="100" value="5"><button class="full" onclick="addBalance()">Demo balans əlavə et</button><p class="muted">Bu düymə real ödəniş etmir.</p></div>`}
+function buy(id){let s=services.find(x=>x.id===id);if(!s)return;if(balance<s.price){alert("Balans kifayət etmir. Demo balansını artır.");return}if(!confirm(s.name+" üçün "+money(s.price)+" məbləğində demo sifariş yaradılsın?"))return;balance-=Number(s.price);orders.push({id:Date.now().toString().slice(-8),name:s.name,price:Number(s.price),status:"Demo yaradıldı",date:new Date().toLocaleDateString("az-AZ")});save();render();alert("Demo sifariş yaradıldı. Real xidmət hələ qoşulmayıb.")}
+function addBalance(){let n=Number($("amount")?.value);if(!Number.isFinite(n)||n<1||n>100){alert("1–100 AZN arası məbləğ daxil et.");return}balance+=n;save();go("balance");alert("Demo balans artırıldı. Real ödəniş edilməyib.")}
+function adminLogin(){let pin=prompt("Demo admin kodunu daxil et:");if(pin==="2468"){page="admin";render()}else if(pin!==null)alert("Kod yanlışdır. Demo kodu: 2468")}
+function adminPage(){return `<h2>Admin paneli</h2><div class="notice">Demo admin girişidir. Kod brauzerdə gizli deyil. Həqiqi istifadəçilər və ödənişlər üçün server təhlükəsizliyi qurulmalıdır.</div><div class="grid" style="margin-top:14px"><div class="card"><div class="muted">Xidmət sayı</div><h2>${services.length}</h2></div><div class="card"><div class="muted">Demo sifariş sayı</div><h2>${orders.length}</h2></div></div>
+<h2 class="section-title">Yeni xidmət əlavə et</h2><div class="card"><label>Xidmətin adı</label><input id="newName" class="field" placeholder="Məsələn, Yeni xidmət"><label>Kateqoriya</label><select id="newCat" class="field"><option>Virtual nömrələr</option><option>SMM paneli</option><option>Zəng və SMS</option><option>Mesaj alətləri</option></select><label>Qiymət (AZN)</label><input id="newPrice" class="field" type="number" min="0.1" step="0.1" placeholder="2.5"><label>Təsvir</label><input id="newDesc" class="field" placeholder="Xidmət haqqında"><button class="full" onclick="addService()">＋ Xidmət əlavə et</button></div>
+<h2 class="section-title">Xidmətləri idarə et</h2>${services.map(s=>`<div class="card" style="margin-bottom:10px"><b>${safe(s.name)}</b><p class="muted">${safe(s.cat)} · ${money(s.price)}</p><div class="row"><button onclick="editPrice(${s.id})">Qiymət dəyiş</button><button class="${s.active?'danger':''}" onclick="toggleService(${s.id})">${s.active?'Deaktiv et':'Aktiv et'}</button><button class="danger" onclick="deleteService(${s.id})">Sil</button></div></div>`).join("")}
+<h2 class="section-title">Sifarişləri idarə et</h2>${orders.length?orders.slice().reverse().map(o=>`<div class="card" style="margin:10px 0"><b>${safe(o.name)}</b><p class="muted">#${o.id} · ${money(o.price)} · ${safe(o.status)}</p><select class="field" onchange="changeStatus('${o.id}',this.value)">${["Demo yaradıldı","Emal olunur","Tamamlandı","Ləğv edildi"].map(x=>`<option ${o.status===x?'selected':''}>${x}</option>`).join("")}</select></div>`).join(""):'<div class="card muted">Sifariş yoxdur.</div>'}
+<button class="full" style="margin-top:15px;background:#263651" onclick="go('home')">Ana səhifəyə qayıt</button>`}
+function addService(){let name=$("newName").value.trim(),cat=$("newCat").value,price=Number($("newPrice").value),desc=$("newDesc").value.trim();if(!name||!Number.isFinite(price)||price<=0){alert("Xidmət adı və düzgün qiymət daxil et.");return}services.push({id:Date.now(),name,cat,price,desc:desc||"Demo xidmət",active:true});save();render();alert("Demo xidmət əlavə edildi.")}
+function editPrice(id){let s=services.find(x=>x.id===id),p=prompt("Yeni qiyməti AZN ilə yaz:",s.price);if(p===null)return;p=Number(p);if(!Number.isFinite(p)||p<=0){alert("Düzgün qiymət yaz.");return}s.price=p;save();render()}
+function toggleService(id){let s=services.find(x=>x.id===id);s.active=!s.active;save();render()}
+function deleteService(id){if(!confirm("Bu demo xidməti silmək istəyirsən?"))return;services=services.filter(s=>s.id!==id);save();render()}
+function changeStatus(id,status){let o=orders.find(x=>x.id===id);if(o){o.status=status;save();render()}}
+function render(){let html=page==="home"?home():page==="services"?servicesPage():page==="orders"?ordersPage():page==="profile"?profilePage():page==="balance"?balancePage():page==="admin"?adminPage():home();$("app").innerHTML=html;document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page))}
+render();
 </script>
 </body>
 </html>
