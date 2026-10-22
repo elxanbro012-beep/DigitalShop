@@ -1,1 +1,75 @@
-
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigitalClup</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#fff;font-family:Arial,sans-serif}
+header{padding:22px 18px;background:#111a30;border-bottom:1px solid #26324a}
+h1{margin:0;color:#65a7ff;font-size:25px}
+header p{color:#aab6cc;margin-bottom:0}
+main{padding:18px;max-width:700px;margin:auto}
+.balance,.service,.menu{background:#141e34;border:1px solid #293957;border-radius:14px;padding:18px;margin-bottom:15px}
+.balance strong{font-size:27px;display:block;margin:10px 0;color:#69e0b1}
+h2{font-size:19px;margin-top:0}
+button{background:#3478f6;color:white;border:0;padding:12px 16px;border-radius:9px;font-size:15px;cursor:pointer}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+nav button{background:#202c45}
+.service p,.muted{color:#aab6cc}
+.price{font-weight:bold;margin:12px 0}
+footer{text-align:center;padding:25px;color:#8492aa}
+</style>
+</head>
+<body>
+<header>
+<h1>DigitalClup</h1>
+<p>Rəqəmsal xidmətlər mağazası</p>
+</header>
+<main>
+<nav>
+<button onclick="show('home')">Ana səhifə</button>
+<button onclick="show('services')">Xidmətlər</button>
+<button onclick="show('orders')">Sifarişlərim</button>
+<button onclick="show('profile')">Profil</button>
+</nav>
+<section id="content"></section>
+</main>
+<footer>DigitalClup © 2026</footer>
+<script>
+const services=[
+{name:"YouTube xidmətləri",price:5},
+{name:"Telegram xidmətləri",price:3},
+{name:"Rəqəmsal xidmətlər",price:4}
+];
+let balance=20;
+let orders=[];
+function show(page){
+const c=document.getElementById("content");
+if(page==="home"){
+c.innerHTML=`<div class="balance"><h2>Mənim balansım</h2><strong>${balance.toFixed(2)} AZN</strong><button onclick="addBalance()">Balansı artır</button></div><div class="menu"><h2>Xoş gəlmisən!</h2><p class="muted">Xidmətləri seç, sifarişlərini və balansını bir yerdən idarə et.</p><button onclick="show('services')">Mağazaya keç</button></div>`;
+}
+if(page==="services"){
+c.innerHTML="<h2>Xidmətlər</h2>"+services.map((s,i)=>`<div class="service"><h2>${s.name}</h2><p>Demo xidmət — sifariş sınağı üçün.</p><div class="price">${s.price.toFixed(2)} AZN</div><button onclick="buy(${i})">Sifariş et</button></div>`).join("");
+}
+if(page==="orders"){
+c.innerHTML="<h2>Sifarişlərim</h2>"+(orders.length?orders.map(o=>`<div class="service">${o.name}<p>${o.price.toFixed(2)} AZN — ${o.status}</p></div>`).join(""):"<p class='muted'>Hələ sifariş yoxdur.</p>");
+}
+if(page==="profile"){
+c.innerHTML=`<div class="service"><h2>Profil</h2><p>İstifadəçi: Demo istifadəçi</p><p>Balans: ${balance.toFixed(2)} AZN</p><p class="muted">Bu, hələlik sınaq profilidir.</p></div>`;
+}
+}
+function addBalance(){alert("Demo rejimidir. Real ödəniş sistemi hələ qoşulmayıb.");}
+function buy(i){
+const s=services[i];
+if(balance<s.price){alert("Balans kifayət etmir.");return;}
+balance-=s.price;
+orders.push({...s,status:"Demo sifariş"});
+show("services");
+alert("Demo sifariş yaradıldı!");
+}
+show("home");
+</script>
+</body>
+</html>
